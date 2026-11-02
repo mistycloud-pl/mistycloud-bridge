@@ -5,8 +5,8 @@ namespace MistyCloud\Bridge\Http\Controllers;
 use App\Http\Controllers\Api\Application\ApplicationApiController;
 use App\Models\Server;
 use App\Services\Eggs\EggChangerService;
-use App\Transformers\Api\Application\ServerTransformer;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 
 class EggChangeController extends ApplicationApiController
@@ -16,7 +16,7 @@ class EggChangeController extends ApplicationApiController
         parent::__construct();
     }
 
-    public function __invoke(Request $request, Server $server): array
+    public function __invoke(Request $request, Server $server): Response
     {
         $data = $request->validate([
             'egg_id' => ['required', 'integer', 'exists:eggs,id'],
@@ -58,10 +58,8 @@ class EggChangeController extends ApplicationApiController
             Cache::put("mistycloud.sar.{$server->id}", true, now()->addMinutes(10));
         }
 
-        $server->refresh();
-
-        return $this->fractal->item($server)
-            ->transformWith($this->getTransformer(ServerTransformer::class))
-            ->toArray();
+        // No body: Pelican replaced Fractal with its own response layer in
+        // 1.0.0-rc.1, and the panel does not read the server back anyway.
+        return $this->returnNoContent();
     }
 }

@@ -2,7 +2,7 @@
   "id": "mistycloud-bridge",
   "name": "MistyCloud Bridge",
   "author": "MistyCloud",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "MistyCloud integration plugin for Pelican Panel.",
   "category": "plugin",
   "namespace": "MistyCloud\\Bridge",
